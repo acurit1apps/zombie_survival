@@ -22,12 +22,19 @@
 	  44.275175459544656 -70.54617291534426 weapons.png
 	  44.274991096154814 -70.54728871429445 hospital.png`
 	var markers = data.split("\n");
+	if(navigator.geolocation) {
+	  navigator.geolocation.getCurrentPosition(getPos);
+	}
+	function getPos(position) {
+	  var latitude = position.coords.latitude;
+	  var longitude = position.coords.longitude;
+	}
     	function initMap() {
 
             	     zombie_map = new google.maps.Map(document.getElementById('zombie_map'), {
             	     zoom: 18,
-
-		     center: {lat: 44.27579, lng: -70.54613}
+       		     
+		     center: {lat: latitude, lng: longitude}
         	});
 		
 		
