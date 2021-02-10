@@ -3,8 +3,11 @@
     <title>My page title</title>
     <style>
     #zombie_map {
-      width: 600px;
-      height: 400px;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
       background-color: grey;
      }
      </style>
@@ -12,37 +15,51 @@
   <body>
     My zombie map
     <div id="zombie_map"></div>
-    <form>
-	Select an emoji
-	<select id="icon_to_use">
-		<option value="zombie.png">Zombie</option>
-		<option value="hospital.png">Hospital</option>
-		<option value="weapons.png">Weapons</option>
-	</select>
-    </form>
     <script>
     	var zombie_map;
+	var all_markers = []
+	var data = `44.274745277401976 -70.54531460845949 zombie.png
+	  44.275175459544656 -70.54617291534426 weapons.png
+	  44.274991096154814 -70.54728871429445 hospital.png`
+	var markers = data.split("\n");
     	function initMap() {
 
             	     zombie_map = new google.maps.Map(document.getElementById('zombie_map'), {
-            	     zoom: 10,
-		     // Maine med : center: {lat: 43.6534548, lng: -70.276123}
-		     //paris, maine:
+            	     zoom: 18,
+
 		     center: {lat: 44.27579, lng: -70.54613}
         	});
-		zombie_map.addListener('click', function(e) {
-			var location = e.latLng;
-			place_marker(location);
-		});
+		
+		
+		for(var i=0; i < markers.length; i++){
+		  var marker_data = markers[i].trim();
+		  marker_data = marker_data.split(" ");
+		  var lat = marker_data[0];
+		  var lng = marker_data[1];
+		  var emoji = marker_data[2];
+		  var marker_position = new google.maps.LatLng(lat, lng);
+		  var marker = new google.maps.Marker({
+		    position: marker_position,
+		    map: zombie_map,
+		    icon: emoji
+		  });
+		  all_markers.push(marker);
+		}
+		
+		if(navigator.geolocation) {
+		  navigator.geolocation.watchPosition(set_my_position);
+		}
+		else {
+		  alert("Geolocation doesn't work in your browser");
+		}
     	}
-	function place_marker(location) {
-		var emoji = document.getElementById('icon_to_use').value;
-		var marker = new google.maps.Marker({
-			position: location,
-			map: zombie_map,
-			icon: emoji
-		});
-		console.log(location.lat() + " " + location.lng() + " " + emoji);
+	function set_my_position(position) {
+	  var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+	  var marker = new google.maps.Marker({
+	    position: pos,
+	    map: zombie_map,
+	    icon: "player.png"
+	  });
 	}
 	</script>
 	<script async defer
