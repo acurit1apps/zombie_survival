@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>My page title</title>
+    <title>Zombie/Princess Survival</title>
     <style>
     #zombie_map {
       width: 100%;
@@ -17,6 +17,8 @@
     <div id="zombie_map"></div>
     <script>
     	var zombie_map;
+	var score;
+	var tolerance;
 	var old_position;
 	var all_markers = []
 	var data = `44.274745277401976 -70.54531460845949 zombie.png
@@ -109,10 +111,24 @@
 	  });
 	  zombie_map.setCenter(pos);
 	  old_position = marker;
+	  for(var i=0; i < all_markers.length; i++)
+	  {
+	    var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, all_markers[i].getPosition());
+	    if( distance < tolerance ){
+	      var what_is_it = all_markers[i].getIcon();
+	      what_is_it = what_is_it.replace(".png", "");
+	      alert("Found the " + what_is_it);
+	      if(what_is_it != "zombie"){
+		score += 10;
+		alert("Your score is " + score);
+	      }
+	      all_markers[i].setMap(null);
+	    }
+	  }
 	}
 	</script>
 	<script async defer
-	  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAe-IRagOX1D2gzMpK14jSIQ0rY4Y6tQ-8&callback=initMap">
+	  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAe-IRagOX1D2gzMpK14jSIQ0rY4Y6tQ-8&callback=initMap&libraries=geometry">
 	</script>
   </body>
 </html>
