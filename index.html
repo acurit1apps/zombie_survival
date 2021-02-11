@@ -21,7 +21,14 @@
 	var all_markers = []
 	var data = `44.274745277401976 -70.54531460845949 zombie.png
 	  44.275175459544656 -70.54617291534426 weapons.png
-	  44.274991096154814 -70.54728871429445 hospital.png`
+	  44.274991096154814 -70.54728871429445 hospital.png
+	  43.65333784434727 -70.27563571929932 elsa.png
+	  43.65331119145109 -70.27603180489349 anna.png
+	  43.65332283540028 -70.27579577050018 olaf.png
+	  43.65363333987926 -70.27625174603271 castle.png
+	  43.65284543163212 -70.27656288227844 castle.png
+	  43.65351690088778 -70.27503402313995 castle.png
+	  `
 	var markers = data.split("\n");
     	function initMap() {
 
@@ -64,7 +71,7 @@
 	  var marker = new google.maps.Marker({
 	    position: pos,
 	    map: zombie_map,
-	    icon: "player.png"
+	    icon: "princess.png"
 	  });
 	  zombie_map.setCenter(pos);
 	  old_position = marker;
