@@ -17,24 +17,19 @@
     <div id="zombie_map"></div>
     <script>
     	var zombie_map;
+	var old_position;
 	var all_markers = []
 	var data = `44.274745277401976 -70.54531460845949 zombie.png
 	  44.275175459544656 -70.54617291534426 weapons.png
 	  44.274991096154814 -70.54728871429445 hospital.png`
 	var markers = data.split("\n");
-	if(navigator.geolocation) {
-	  navigator.geolocation.getCurrentPosition(getPos);
-	}
-	function getPos(position) {
-	  var latitude = position.coords.latitude;
-	  var longitude = position.coords.longitude;
-	}
     	function initMap() {
 
             	     zombie_map = new google.maps.Map(document.getElementById('zombie_map'), {
             	     zoom: 18,
        		     
-		     center: {lat: latitude, lng: longitude}
+		     center: {lat: 43.6534548, lng: -70.276123}
+		     
         	});
 		
 		
@@ -59,14 +54,20 @@
 		else {
 		  alert("Geolocation doesn't work in your browser");
 		}
+		
     	}
 	function set_my_position(position) {
+	  if(old_position){
+	    old_position.setMap(null);
+	  }
 	  var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 	  var marker = new google.maps.Marker({
 	    position: pos,
 	    map: zombie_map,
 	    icon: "player.png"
 	  });
+	  zombie_map.setCenter(pos);
+	  old_position = marker;
 	}
 	</script>
 	<script async defer
