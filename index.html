@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>My page title</title>
+    <title>Zombie/Princess Survival</title>
     <style>
     #zombie_map {
       width: 100%;
@@ -17,24 +17,62 @@
     <div id="zombie_map"></div>
     <script>
     	var zombie_map;
+	var score;
+	var tolerance;
+	var old_position;
 	var all_markers = []
 	var data = `44.274745277401976 -70.54531460845949 zombie.png
 	  44.275175459544656 -70.54617291534426 weapons.png
-	  44.274991096154814 -70.54728871429445 hospital.png`
+	  44.274991096154814 -70.54728871429445 hospital.png
+	  43.65333784434727 -70.27563571929932 elsa.png
+	  43.65331119145109 -70.27603180489349 anna.png
+	  43.65332283540028 -70.27579577050018 olaf.png
+	  43.65363333987926 -70.27625174603271 castle.png
+	  43.65284543163212 -70.27656288227844 castle.png
+	  43.65351690088778 -70.27503402313995 castle.png
+	  43.71502287453553 -70.31169930062491 zombie.png
+	  43.71148664879805 -70.31676331124503 zombie.png
+	  43.71905515801009 -70.31032600960928 zombie.png
+	  43.71806262109983 -70.31590500436026 hospital.png
+	  43.71379767377217 -70.33370018005371 weapons.png
+	  43.717442277181796 -70.32285729012686 weapons.png
+	  43.7895607497757 -70.4084587097168 weapons.png
+	  43.79646838240084 -70.40467494864097 zombie.png
+	  43.79268913972316 -70.40810817618004 zombie.png
+	  43.78556368793399 -70.4126572026693 zombie.png
+	  43.793246747935285 -70.41634792227379 zombie.png
+	  43.79566299006715 -70.42166942495933 zombie.png
+	  43.785067972729685 -70.40021175284019 castle.png
+	  44.17214957829603 -70.51141020440562 zombie.png
+	  44.17522759846834 -70.51398512505992 zombie.png
+	  44.171533954983104 -70.51424261712535 zombie.png
+	  44.17288831778906 -70.5184483208607 weapons.png
+	  44.17553539164962 -70.5078053154896 castle.png
+	  44.17485824453023 -70.50523039483531 hospital.png
+	  44.19266678646406 -70.5311107635498 hospital.png
+	  44.191200445622115 -70.52484340876649 zombie.png
+	  44.1915081554204 -70.52707500666688 zombie.png
+	  44.19255435671757 -70.53634472102235 zombie.png
+	  44.19704665706631 -70.54424114436219 zombie.png
+	  44.202030863493306 -70.54063625544617 zombie.png
+	  44.20061563786532 -70.53823299616883 zombie.png
+	  44.19760047860169 -70.53462810725281 zombie.png
+	  44.195508236600574 -70.53660221308778 zombie.png
+	  44.21187497052059 -70.52913494319031 castle.png
+	  44.20996780327959 -70.53231067866395 hospital.png
+	  44.1981542949318 -70.52913494319031 weapons.png
+	  44.203015348227794 -70.52982158869813 weapons.png
+	  44.215651559937214 -70.51910946542327 weapons.png
+	  44.22373658957661 -70.51342964172363 weapons.png
+	  `
 	var markers = data.split("\n");
-	if(navigator.geolocation) {
-	  navigator.geolocation.getCurrentPosition(getPos);
-	}
-	function getPos(position) {
-	  var latitude = position.coords.latitude;
-	  var longitude = position.coords.longitude;
-	}
     	function initMap() {
 
             	     zombie_map = new google.maps.Map(document.getElementById('zombie_map'), {
             	     zoom: 18,
        		     
-		     center: {lat: latitude, lng: longitude}
+		     center: {lat: 43.6534548, lng: -70.276123}
+		     
         	});
 		
 		
@@ -59,18 +97,38 @@
 		else {
 		  alert("Geolocation doesn't work in your browser");
 		}
+		
     	}
 	function set_my_position(position) {
+	  if(old_position){
+	    old_position.setMap(null);
+	  }
 	  var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 	  var marker = new google.maps.Marker({
 	    position: pos,
 	    map: zombie_map,
-	    icon: "player.png"
+	    icon: "princess.png"
 	  });
+	  zombie_map.setCenter(pos);
+	  old_position = marker;
+	  for(var i=0; i < all_markers.length; i++)
+	  {
+	    var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, all_markers[i].getPosition());
+	    if( distance < tolerance ){
+	      var what_is_it = all_markers[i].getIcon();
+	      what_is_it = what_is_it.replace(".png", "");
+	      alert("Found the " + what_is_it);
+	      if(what_is_it != "zombie"){
+		score += 10;
+		alert("Your score is " + score);
+	      }
+	      all_markers[i].setMap(null);
+	    }
+	  }
 	}
 	</script>
 	<script async defer
-	  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAe-IRagOX1D2gzMpK14jSIQ0rY4Y6tQ-8&callback=initMap">
+	  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAe-IRagOX1D2gzMpK14jSIQ0rY4Y6tQ-8&callback=initMap&libraries=geometry">
 	</script>
   </body>
 </html>
